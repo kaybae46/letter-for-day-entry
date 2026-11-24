@@ -1,36 +1,43 @@
-// One Letter for Your Day — main.ts
-// Entry: a single letter, A-Z, standing for the word that describes the day.
-// The letter is N: "no sleep".
-//
-// Why N: today, Tuesday 24 November 2026, was worked straight through the
-// night — bounty builds, hourly Interstellar cache claims (00:12, 02:16,
-// 04:17 WIB) and a make.fun screening sweep every five minutes, with no
-// sleep in between. "No sleep" is the truest, most vivid word for the day,
-// and N is its first letter: short, blunt, and instantly readable as the
-// night-shift diary entry it is.
-//
-// The letter is fixed, not computed from the date: the final phase re-runs
-// this program after the deadline, and the entry must still be N then.
-//
-// The gate requires /output/entry.txt to be UTF-8 text of exactly one
-// character, not only white space. So the program writes one byte, "N",
-// with no trailing newline, then reads the file back and refuses to exit
-// cleanly unless it holds exactly one ASCII letter.
-
+// One Letter for Your Day — writes the single letter "N" ("no sleep").
+// The letter captures the day in one character: N for a night with no sleep.
+// Why N: Tuesday 24 November 2026 was worked straight through the night —
+// bounty builds, hourly Interstellar cache claims (00:12, 02:16, 04:17 WIB)
+// and a make.fun screening sweep every five minutes, with no sleep in
+// between. "No sleep" is the truest word for the day, and N is its first
+// letter. The letter is fixed, not computed from the date: the final phase
+// re-runs this program after the deadline, and the entry must still be N.
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { join } from "node:path";
 
+const OUTPUT_DIR = process.env.OUTPUT_DIR ?? "/output";
 const LETTER = "N";
-const ENTRY_PATH = "/output/entry.txt";
 
-mkdirSync("/output", { recursive: true });
-writeFileSync(ENTRY_PATH, LETTER, "utf8");
+// Gate bounds: the entry must be exactly one character.
+const MIN_CHARS = 1;
+const MAX_CHARS = 1;
 
-// Verify the gate condition: exactly one character, A-Z, nothing else.
-const written = readFileSync(ENTRY_PATH, "utf8");
-if (written.length !== 1 || !/^[A-Z]$/.test(written)) {
-  console.error(
-    `invalid entry: expected exactly one letter A-Z, got ${JSON.stringify(written)}`,
-  );
-  process.exit(1);
+function main(): void {
+  if (LETTER.length < MIN_CHARS || LETTER.length > MAX_CHARS) {
+    throw new Error(
+      `expected ${MIN_CHARS}-${MAX_CHARS} character(s), got ${LETTER.length}`,
+    );
+  }
+  if (!/^[A-Z]$/.test(LETTER)) {
+    throw new Error(`expected one letter A-Z, got ${JSON.stringify(LETTER)}`);
+  }
+  mkdirSync(OUTPUT_DIR, { recursive: true });
+  const entryPath = join(OUTPUT_DIR, "entry.txt");
+  writeFileSync(entryPath, LETTER, "utf8");
+
+  // Read-back verification: refuse a clean exit unless the file holds
+  // exactly one ASCII letter and nothing else (no trailing newline).
+  const written = readFileSync(entryPath, "utf8");
+  if (written !== LETTER) {
+    throw new Error(
+      `read-back mismatch: expected ${JSON.stringify(LETTER)}, got ${JSON.stringify(written)}`,
+    );
+  }
+  console.log(`wrote entry: ${written}`);
 }
-console.log(`wrote entry: ${written}`);
+
+main();
