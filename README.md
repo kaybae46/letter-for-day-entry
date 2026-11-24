@@ -1,6 +1,8 @@
 # One Letter for Your Day entry
 
 [![make.fun · u-puan-one-letter-for-your-day-e54e9c36](https://make.fun/badge/u-puan-one-letter-for-your-day-e54e9c36.svg)](https://make.fun/bounty/u-puan-one-letter-for-your-day-e54e9c36)
+[![rank](https://make.fun/badge/u-puan-one-letter-for-your-day-e54e9c36/kaybae46/letter-for-day-entry/rank.svg)](https://make.fun/bounty/u-puan-one-letter-for-your-day-e54e9c36)
+[![reward](https://make.fun/badge/u-puan-one-letter-for-your-day-e54e9c36/kaybae46/letter-for-day-entry/reward.svg)](https://make.fun/bounty/u-puan-one-letter-for-your-day-e54e9c36)
 
 One letter, A to Z, standing for the word that describes the day — for make.fun's "One Letter for Your Day" bounty.
 
